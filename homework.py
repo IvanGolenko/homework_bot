@@ -112,8 +112,6 @@ def main():
                 send_message(bot, parse_status(homework))
             else:
                 logger.info("Работы нет")
-                message = 'Работы нет'
-                send_message(bot, message)
             current_timestamp = response['current_date']
             time.sleep(RETRY_TIME)
         except Exception as error:
