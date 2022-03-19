@@ -1,0 +1,4 @@
+2022-03-19 16:45:08,101, ERROR, Сервер вернул невалидный json
+2022-03-19 16:45:08,386, ERROR, Бот упал с ошибкой: 'NoneType' object is not subscriptable
+2022-03-19 16:45:13,981, ERROR, Сервер вернул невалидный json
+2022-03-19 16:45:14,097, ERROR, Бот упал с ошибкой: 'NoneType' object is not subscriptable
