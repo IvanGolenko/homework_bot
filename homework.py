@@ -34,6 +34,7 @@ logging.basicConfig(
 )
 logger.addHandler(logging.StreamHandler())
 
+
 def send_message(bot, message):
     """Бот отправляет сообщения."""
     logger.info(f'Отправка сообщения: {message}')
@@ -42,6 +43,7 @@ def send_message(bot, message):
         raise telegram.TelegramError(f'Ошибка при отправке: {message}')
     else:
         logger.info(f'Отправка сообщения: {message}')
+
 
 def get_api_answer(current_timestamp):
     """Отправляет запрос к API."""
