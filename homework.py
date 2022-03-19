@@ -1,7 +1,9 @@
+import json
 import logging
 import os
 import sys
 import time
+from http import HTTPStatus
 
 import requests
 import telegram
@@ -37,12 +39,13 @@ logger.addHandler(logging.StreamHandler())
 
 def send_message(bot, message):
     """Бот отправляет сообщения."""
-    logger.info(f'Отправка сообщения: {message}')
-    bot_message = bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
-    if not bot_message:
-        raise telegram.TelegramError(f'Ошибка при отправке: {message}')
-    else:
+    try:
+        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
         logger.info(f'Отправка сообщения: {message}')
+    except telegram.TelegramError as error:
+        logger.error(f'Возникла ошибка Telegram: {error.message}')
+    except Exception as error:
+        logger.error(f'Возникла ошибка {error} при отправке {message}')
 
 
 def get_api_answer(current_timestamp):
@@ -54,15 +57,14 @@ def get_api_answer(current_timestamp):
             headers=HEADERS,
             params=params
         )
-        if homework_statuses.status_code == 500:
+        if homework_statuses.status_code == HTTPStatus.INTERNAL_SERVER_ERROR:
             raise Exception('Нет ответа от сервера')
-        if homework_statuses.status_code != 200:
+        if homework_statuses.status_code != HTTPStatus.OK:
             raise Exception('Ошибка в коде состояния HTTP')
     except RequestException as error:
         logging.error(error)
         raise RequestException(
             'Ошибка ответа от сервера')
-
     return homework_statuses.json()
 
 
@@ -75,7 +77,7 @@ def check_response(response):
     elif 'homeworks' not in response:
         logger.error('Not found key homeworks')
         raise KeyError('Нет ключа homeworks')
-    elif not isinstance(response['homeworks'], list):
+    elif not isinstance(homeworks, list):
         raise TypeError('API возвращает не список')
     return homeworks
 
