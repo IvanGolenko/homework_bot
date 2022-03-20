@@ -47,7 +47,9 @@ def send_message(bot, message):
         else:
             logger.info(f'Отправка сообщения: {message}')
     except json.decoder.JSONDecodeError:
-        raise telegram.TelegramError(f'Ошибка разбора ответа при отправке: {message}')
+        raise telegram.TelegramError(
+            f'Ошибка разбора ответа при отправке: {message}'
+        )
 
 
 def get_api_answer(current_timestamp):
