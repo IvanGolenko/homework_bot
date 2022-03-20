@@ -39,13 +39,15 @@ logger.addHandler(logging.StreamHandler())
 
 def send_message(bot, message):
     """Бот отправляет сообщения."""
+    logger.info(f'Отправка сообщения: {message}')
     try:
-        bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
-        logger.info(f'Отправка сообщения: {message}')
-    except telegram.TelegramError as error:
-        logger.error(f'Возникла ошибка Telegram: {error.message}')
-    except Exception as error:
-        logger.error(f'Возникла ошибка {error} при отправке {message}')
+        bot_message = bot.send_message(chat_id=TELEGRAM_CHAT_ID, text=message)
+        if not bot_message:
+            raise telegram.TelegramError(f'Ошибка при отправке: {message}')
+        else:
+            logger.info(f'Отправка сообщения: {message}')
+    except json.decoder.JSONDecodeError:
+        raise telegram.TelegramError(f'Ошибка разбора ответа при отправке: {message}')
 
 
 def get_api_answer(current_timestamp):
